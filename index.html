@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Universal Video Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            min-width: 100vw;
+            /* Super attractive blue-purple gradient */
+            background: linear-gradient(135deg, #ddff00 0%, #ff0000 100%);
+            font-family: 'Poppins', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-card {
+            background: rgba(255,255,255,0.20);
+            box-shadow: 0 8px 32px 0 rgba(221,36,118,0.18), 0 2px 8px 0 rgba(255,81,47,0.10);
+            border-radius: 32px;
+            padding: 38px 32px 28px 32px;
+            max-width: 400px;
+            width: 95vw;
+            margin: 24px 0 32px 0;
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255,255,255,0.22);
+            transition: box-shadow 0.2s, border-radius 0.2s;
+        }
+        .main-card h1 {
+            background: none;
+            color: #007bff;
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.6em;
+            margin-top: 0.2em;
+            letter-spacing: 1.5px;
+            filter: drop-shadow(0 2px 8px #007bff55);
+        }
+        .main-card h2 {
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 2.2em;
+            opacity: 0.92;
+        }
+        .form-label {
+            color: #fff;
+            font-weight: 600;
+            margin-top: 1.2em;
+            display: block;
+            font-size: 1.08em;
+            letter-spacing: 0.5px;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 13px 12px;
+            margin-top: 0.5em;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.95);
+            font-size: 1.08em;
+            outline: none;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+            margin-bottom: 0.2em;
+            transition: box-shadow 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            box-shadow: 0 0 0 2px #ff512f44;
+        }
+        .download-btn {
+            width: 100%;
+            margin-top: 2.2em;
+            padding: 15px 0;
+            background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.18em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,123,255,0.13);
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .download-btn:hover {
+            background: linear-gradient(90deg, #0056b3 0%, #007bff 100%);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .result {
+            margin-top: 1.7em;
+            text-align: center;
+        }
+        .error {
+            color: #d9534f;
+            font-weight: 600;
+        }
+        .success {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .footer {
+            text-align: center;
+            color: #36ff00 !important;
+            background: none !important;
+            margin-top: 2.8em;
+            font-size: 1.08em;
+            opacity: 0.95;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            text-shadow: 0 2px 8px #36ff0088, 0 1px 2px #fff2;
+        }
+        .processing-anim {
+            color: #007bff;
+            font-weight: 700;
+            font-size: 1.08em;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            display: inline-block;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        .processing-anim::after {
+            display: inline-block;
+            animation: dots 1.2s steps(4, end) infinite;
+            content: '';
+            vertical-align: bottom;
+        }
+        @media (max-width: 600px) {
+            .main-card {
+                padding: 14px 2vw 10px 2vw;
+                margin: 10px 0;
+                border-radius: 16px;
+                max-width: 98vw;
+            }
+            .main-card h1 {
+                font-size: 1.25rem;
+                letter-spacing: 1px;
+            }
+            .main-card h2 {
+                font-size: 0.95rem;
+            }
+            .form-label {
+                font-size: 0.98em;
+            }
+            .form-input, .form-select {
+                font-size: 0.98em;
+                padding: 10px 8px;
+            }
+            .download-btn {
+                font-size: 1em;
+                padding: 12px 0;
+            }
+            .footer {
+                font-size: 0.95em;
+                margin-top: 1.2em;
+            }
+        }
+        @media (max-width: 400px) {
+            .main-card {
+                padding: 6px 1vw 6px 1vw;
+                border-radius: 10px;
+            }
+            .main-card h1 {
+                font-size: 1rem;
+            }
+        }
+        .progress-bar-container {
+            height: 1px !important;
+            min-height: 0 !important;
+            max-height: 2px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <h1>Universal Video Downloader</h1>
+        <h2>Download your favorite videos easily and fast</h2>
+        <form id="downloadForm">
+            <label for="url" class="form-label">Enter YouTube Video URL</label>
+            <input type="url" id="url" name="url" class="form-input" required placeholder="https://www.youtube.com/watch?v=...">
+
+            <label for="format" class="form-label">Select Format</label>
+            <select id="format" name="format" class="form-select" required>
+                <option value="mp4">MP4 (Video)</option>
+                <option value="mp3">MP3 (Audio)</option>
+            </select>
+
+            <label for="quality" class="form-label">Select Resolution</label>
+            <select id="quality" name="quality" class="form-select">
+                <option value="4320">Super High (4K/8K)</option>
+                <option value="1080" selected>1080p (Default)</option>
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+                <option value="360">360p</option>
+            </select>
+
+            <button type="submit" class="download-btn">Download</button>
+        </form>
+        <div class="result" id="result"></div>
+        <div class="footer" style="margin-top:1.5em; font-weight:bold; color:#FFD700;">Design and Developers by YJ Developers</div>
+    </div>
+    <script>
+        const API_KEY = 'your-secret-api-key'; // Set the same key as in your Flask app
+        document.getElementById('downloadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            const format = document.getElementById('format').value;
+            const quality = document.getElementById('quality').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<span class="processing-anim">Processing</span>';
+            resultDiv.className = 'result';
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': API_KEY
+                    },
+                    body: JSON.stringify({ url, format, quality })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    // Automatically trigger download with original filename
+                    const downloadUrl = `${data.download_url}?name=${encodeURIComponent(data.user_filename)}`;
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = data.user_filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    resultDiv.innerHTML = `<span class="success">Your download should begin automatically.<br>If not, <a href="${downloadUrl}" download>click here</a>.</span><br><span style='font-size:0.95em;opacity:0.8;'>(link valid for 10 minutes)</span>`;
+                } else {
+                    resultDiv.innerHTML = `<span class="error">${data.error || 'Download failed.'}</span>`;
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `<span class="error">Network error. Please try again.</span>`;
+            }
+        });
+    </script>
+</body>
+</html>
