@@ -6,6 +6,10 @@ import threading
 import time
 from werkzeug.utils import secure_filename
 
+# Get the absolute path of the directory where app.py is located
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+COOKIE_FILE_PATH = os.path.join(APP_ROOT, 'cookies.txt')
+
 app = Flask(__name__)
 DOWNLOAD_FOLDER = 'downloads'
 API_KEY = 'your-secret-api-key'  # Change this to your actual API key
@@ -64,8 +68,7 @@ def download():
         'quiet': True,
         'noplaylist': True,
         'progress_hooks': [progress_hook],
-        # Add the path to your cookies file here
-        'cookiefile': 'cookies.txt',  # Assumes cookies.txt is in the same directory as app.py
+        'cookiefile': COOKIE_FILE_PATH,
     }
     if fmt == 'mp3':
         ydl_opts['format'] = 'bestaudio/best'
