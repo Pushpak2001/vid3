@@ -64,6 +64,8 @@ def download():
         'quiet': True,
         'noplaylist': True,
         'progress_hooks': [progress_hook],
+        # Add the path to your cookies file here
+        'cookiefile': 'cookies.txt',  # Assumes cookies.txt is in the same directory as app.py
     }
     if fmt == 'mp3':
         ydl_opts['format'] = 'bestaudio/best'
